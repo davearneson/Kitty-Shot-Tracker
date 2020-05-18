@@ -15,6 +15,8 @@ There are two sections that have to be added to configuration.yaml for this trac
 There are a couple of things going on here. First of all, there is the kitty_shot template which is outputting text based on the state of the input_boolean entities that we created in the last step. I will create automations later that will not allow any of the input_boolean entities to be on at the same time, but this is the main component of the sensor. 
 
 ```
+# configuration.yaml
+
 ##########Kitty Shot Sensors##########
 sensor:
 - platform: template
@@ -35,6 +37,8 @@ sensor:
 Next, this is a template sensor to be used as a component to check to see who gave the shot, and notify the other person that it has been given. I will get more into this later.
 
 ```
+# configuration.yaml
+
 - platform: template
   sensors:
     kitty_shot_notify:
@@ -53,6 +57,8 @@ Next, this is a template sensor to be used as a component to check to see who ga
 This part of the project requires that you have set up actionable notifications. I had some trouble doing this when I first did it for another project, but it’s fairly well documented here: https://companion.home-assistant.io/docs/notifications/actionable-notifications/
 
 ```
+# configuration.yaml
+
 ios:
   push:
     categories:

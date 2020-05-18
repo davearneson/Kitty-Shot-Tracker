@@ -68,7 +68,7 @@ ios:
 ```
 # Automations
 
-I created a number of automations, and I’ll do my best to explain them and the logic behind them.
+I created nine automations for this project, and I’ll do my best to explain them and the logic behind them:
 
 ## Shot Needed Notifications
 
@@ -209,7 +209,7 @@ This automation sends the reminder notification again in one hour. This is usefu
     service: automation.trigger
 ```
 
-I set up this automation to use with an amazon echo button that we had lying around. If one of us gives the cat his shot while we don’t have our phone handy, we can just push the echo button which is linked to the input_boolean.kitty_shot_someone entity through an Alexa routine. Because it could be either of us (or a cat sitter), we settled on the terminology “Someone.” Both of us will be alerted if this button is pushed. 
+I set up this automation to use with an Amazon Echo Button that we had lying around. If one of us gives the cat his shot while we don’t have our phone handy, we can just push the echo button which is linked to the input_boolean.kitty_shot_someone entity through an Alexa routine. Because it could be either of us (or a cat sitter), we settled on the terminology “Someone.” Both of us will be alerted if this button is pushed. 
 
 ```
 - alias: Kitty Shot Tracker - Notify that shot has been given by "SOMEONE"
@@ -303,5 +303,103 @@ Finally, this automation resets the tracker twice a day, so when it’s time to 
   - data: {}
     entity_id: input_boolean.kitty_shot_someone
     service: input_boolean.turn_off
+```
+
+# Custom Card for Lovelace UI
+
+I combined everything into a custom picture elements card. I had originally used an entity card with three button cards combined into stacks, but found I preferred the look of everything unified together, so I came up with this:
+
+```
+elements:
+  - entity: sensor.kitty_shot
+    style:
+      bottom: 58%
+      color: black
+      font-size: 24px
+      left: 3.2%
+      transform: initial
+    type: state-label
+  - entity: input_boolean.kitty_shot_wife
+    state_image:
+      'off': 'https://i.imgur.com/FDSN008.png'
+      'on': 'https://i.imgur.com/FDSN008.png'
+    style:
+      left: 91%
+      top: 25.5%
+      width: 18.2%
+    tap_action:
+      action: none
+    type: image
+  - entity: input_boolean.kitty_shot_wife
+    state_image:
+      'off': 'https://i.imgur.com/HjzKYy0.png'
+      'on': 'https://i.imgur.com/HjzKYy0.png'
+    style:
+      left: 17%
+      top: 73.5%
+      width: 31.2%
+    tap_action:
+      action: call-service
+      service: input_boolean.turn_on
+      service_data:
+        entity_id: input_boolean.kitty_shot_wife
+    type: image
+  - entity: input_boolean.kitty_shot_wife
+    icon: 'mdi:needle'
+    style:
+      left: 13%
+      top: 57%
+      transform: 'scale(2.8,2.8)'
+    tap_action:
+      action: call-service
+      service: input_boolean.turn_on
+      service_data:
+        entity_id: input_boolean.kitty_shot_wife
+    type: state-icon
+  - entity: input_boolean.kitty_shot_husband
+    state_image:
+      'off': 'https://i.imgur.com/7wszxUu.png'
+      'on': 'https://i.imgur.com/7wszxUu.png'
+    style:
+      left: 50%
+      top: 73.5%
+      width: 31.2%
+    tap_action:
+      action: call-service
+      service: input_boolean.turn_on
+      service_data:
+        entity_id: input_boolean.kitty_shot_husband
+    type: image
+  - entity: input_boolean.kitty_shot_husband
+    icon: 'mdi:needle'
+    style:
+      left: 46%
+      top: 57%
+      transform: 'scale(2.8,2.8)'
+    tap_action:
+      action: call-service
+      service: input_boolean.turn_on
+      service_data:
+        entity_id: input_boolean.kitty_shot_husband
+    type: state-icon
+  - entity: input_boolean.kitty_shot_someone
+    state_image:
+      'off': 'https://i.imgur.com/4jHEQ28.png'
+      'on': 'https://i.imgur.com/4jHEQ28.png'
+    style:
+      left: 83%
+      top: 73.5%
+      width: 31.2%
+    tap_action:
+      action: call-service
+      service: input_boolean.turn_off
+      service_data:
+        entity_id:
+          - input_boolean.kitty_shot_husband
+          - input_boolean.kitty_shot_wife
+          - input_boolean.kitty_shot_someone
+    type: image
+image: 'https://i.imgur.com/vxmYbYb.png'
+type: picture-elements
 ```
 

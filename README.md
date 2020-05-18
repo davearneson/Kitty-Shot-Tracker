@@ -81,6 +81,8 @@ I created nine automations for this project, and I’ll do my best to explain th
 The first few automations send the actionable notification at prescribed times, which vary slightly between weekdays and weekends. (Don’t judge us wanting an extra hour of sleep on weekends!)
 
 ```
+# automations.yaml
+
 - alias: Kitty Shot Tracker - Push Notification - Weekdays
   description: ''
   trigger:
@@ -152,6 +154,8 @@ The first few automations send the actionable notification at prescribed times, 
 This next set is pulling triple duty. The automation is run if the boolean switch is turned on manually (through the card UI) or if the actionable notification is fired. These automations also prohibit any of the three switches from being on at the same time.
 
 ```
+# automations.yaml
+
 - alias: Kitty Shot Tracker - iOS Response - Wife
   description: ''
   trigger:
@@ -200,6 +204,8 @@ This next set is pulling triple duty. The automation is run if the boolean switc
 This automation sends the reminder notification again in one hour. This is useful if no one is home or available to give the shot at the moment, and we need to be reminded later. I decided not to do an arriving home trigger in case we were already home, but unable to get to it right that moment.
 
 ```
+# automations.yaml
+
 - alias: Kitty Shot Tracker - iOS Response - Remind me in an hour
   description: ''
   trigger:
@@ -218,6 +224,8 @@ This automation sends the reminder notification again in one hour. This is usefu
 I set up this automation to use with an Amazon Echo Button that we had lying around. If one of us gives the cat his shot while we don’t have our phone handy, we can just push the echo button which is linked to the input_boolean.kitty_shot_someone entity through an Alexa routine. Because it could be either of us (or a cat sitter), we settled on the terminology “Someone.” Both of us will be alerted if this button is pushed. 
 
 ```
+# automations.yaml
+
 - alias: Kitty Shot Tracker - Notify that shot has been given by "SOMEONE"
   description: ''
   trigger:
@@ -242,6 +250,8 @@ I set up this automation to use with an Amazon Echo Button that we had lying aro
 This automation uses the kitty_shot_notify sensor I set up at the beginning in configuration.yaml to check and see who gave the cat his shot, and notify the other person so we don’t double up.
 
 ```
+# automations.yaml
+
 - alias: Kitty Shot Tracker - Notify that shot has been given
   description: ''
   trigger:
@@ -259,6 +269,8 @@ This automation uses the kitty_shot_notify sensor I set up at the beginning in c
 This automation prevents getting duplicate notifications once the shot has been given. 
 
 ```
+# automations.yaml
+
 - alias: Kitty Shot Tracker - Automation Component
   description: Adds logic to not send notification if changing who gave shot.
   trigger:
@@ -291,6 +303,8 @@ This automation prevents getting duplicate notifications once the shot has been 
 Finally, this automation resets the tracker twice a day, so when it’s time to give the shot again, everything is registered as off.
 
 ```
+# automations.yaml
+
 - alias: Kitty Shot Tracker - Reset Tracker
   description: ''
   trigger:

@@ -2,6 +2,8 @@
 
 This project creates a sensor to track whether my wife or I (or anyone else) have given our diabetic cat his shot twice a day. We were constantly yelling across the house to check if the other person had given the shot because we were so worried about doubling up his dose. (Very dangerous). I realize this is a highly specific case use, but almost every project I’ve ever done of this nature has been born out of seeing someone else’s barely related or seemingly unrelated project and being inspired or enabled through their experience to create something that works for me. I hope this helps someone in that way. I have no programming experience, so I would not be surprised if programming best practices are not in play here, and for that I ask your forgiveness.
 
+![Kitty Shot Sensor](https://i.imgur.com/UV3Txtx.jpg)
+
 ## Home Assistant Helpers
 
 I used HA’s helpers to set up three input_boolean entities. I created these in the UI by going to Configuration/Helpers and clicking the add button, then “Toggle.” I then added a name, in my case “Kitty Shot Husband”. I repeated this process twice more and named the input_boolean entities “Kitty Shot Wife” and “Kitty Shot Someone”. These entities will be used as input components in my final sensor. 
@@ -55,6 +57,8 @@ Next, this is a template sensor to be used as a component to check to see who ga
 ## Actionable Notifications
 
 This part of the project requires that you have set up actionable notifications. I had some trouble doing this when I first did it for another project, but it’s fairly well documented here: https://companion.home-assistant.io/docs/notifications/actionable-notifications/
+
+![Kitty Shot Actionable Notification](https://i.imgur.com/1FwSguC.jpg)
 
 ```
 # configuration.yaml
@@ -249,6 +253,8 @@ I set up this automation to use with an Amazon Echo Button that we had lying aro
 
 This automation uses the kitty_shot_notify sensor I set up at the beginning in configuration.yaml to check and see who gave the cat his shot, and notify the other person so we don’t double up.
 
+![Kitty Shot Given Notification](https://i.imgur.com/Nw3YdX5.jpg)
+
 ```
 # automations.yaml
 
@@ -328,6 +334,8 @@ Finally, this automation resets the tracker twice a day, so when it’s time to 
 # Custom Card for Lovelace UI
 
 I combined everything into a custom picture elements card. I had originally used an entity card with three button cards combined into stacks, but found I preferred the look of everything unified together, so I came up with this:
+
+![Kitty Shot Sensor](https://i.imgur.com/UV3Txtx.jpg)
 
 ```
 elements:

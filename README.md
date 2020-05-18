@@ -349,8 +349,8 @@ elements:
     type: state-label
   - entity: input_boolean.kitty_shot_wife
     state_image:
-      'off': 'https://i.imgur.com/FDSN008.png'
-      'on': 'https://i.imgur.com/FDSN008.png'
+      'off': 'https://i.imgur.com/9x0ylYQ.png'
+      'on': 'https://i.imgur.com/9x0ylYQ.png'
     style:
       left: 91%
       top: 25.5%
@@ -360,8 +360,8 @@ elements:
     type: image
   - entity: input_boolean.kitty_shot_wife
     state_image:
-      'off': 'https://i.imgur.com/HjzKYy0.png'
-      'on': 'https://i.imgur.com/HjzKYy0.png'
+      'off': 'https://i.imgur.com/rCs0LIt.png'
+      'on': 'https://i.imgur.com/rCs0LIt.png'
     style:
       left: 17%
       top: 73.5%
@@ -386,8 +386,8 @@ elements:
     type: state-icon
   - entity: input_boolean.kitty_shot_husband
     state_image:
-      'off': 'https://i.imgur.com/7wszxUu.png'
-      'on': 'https://i.imgur.com/7wszxUu.png'
+      'off': 'https://i.imgur.com/pyYumG7.png'
+      'on': 'https://i.imgur.com/pyYumG7.png'
     style:
       left: 50%
       top: 73.5%
@@ -412,8 +412,8 @@ elements:
     type: state-icon
   - entity: input_boolean.kitty_shot_someone
     state_image:
-      'off': 'https://i.imgur.com/4jHEQ28.png'
-      'on': 'https://i.imgur.com/4jHEQ28.png'
+      'off': 'https://i.imgur.com/jqSdMHi.png'
+      'on': 'https://i.imgur.com/jqSdMHi.png'
     style:
       left: 83%
       top: 73.5%
@@ -427,7 +427,6 @@ elements:
           - input_boolean.kitty_shot_wife
           - input_boolean.kitty_shot_someone
     type: image
-image: 'https://i.imgur.com/vxmYbYb.png'
+image: ‘https://i.imgur.com/2KH5oqQ.png'
 type: picture-elements
 ```
-

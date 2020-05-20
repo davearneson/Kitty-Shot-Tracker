@@ -1,25 +1,31 @@
----
 
+# Kitty Shot Tracker
 
----
+This project creates a sensor to track whether my wife or I (or anyone else) have given our diabetic cat his shot twice a day. We were constantly yelling across the house to check if the other person had given the shot because we were so worried about doubling up his dose. (Very dangerous). I realize this is a highly specific case use, but almost every project I’ve ever done of this nature has been born out of seeing someone else’s barely related or seemingly unrelated project and being inspired or enabled through their experience to create something that works for me. I hope this helps someone in that way. I have no programming experience, so I would not be surprised if programming best practices are not in play here, and for that I ask your forgiveness.
 
-<h1 id="kitty-shot-tracker">Kitty Shot Tracker</h1>
-<p>This project creates a sensor to track whether my wife or I (or anyone else) have given our diabetic cat his shot twice a day. We were constantly yelling across the house to check if the other person had given the shot because we were so worried about doubling up his dose. (Very dangerous). I realize this is a highly specific case use, but almost every project I’ve ever done of this nature has been born out of seeing someone else’s barely related or seemingly unrelated project and being inspired or enabled through their experience to create something that works for me. I hope this helps someone in that way. I have no programming experience, so I would not be surprised if programming best practices are not in play here, and for that I ask your forgiveness.</p>
-<p><img src="https://i.imgur.com/UV3Txtx.jpg" alt="Kitty Shot Sensor"></p>
-<h2 id="home-assistant-helpers">Home Assistant Helpers</h2>
-<p>I used HA’s helpers to set up three input_boolean entities. I created these in the UI by going to Configuration/Helpers and clicking the add button, then “Toggle.” I then added a name, in my case “Kitty Shot Husband”. I repeated this process twice more and named the input_boolean entities “Kitty Shot Wife” and “Kitty Shot Someone”. These entities will be used as input components in my final sensor.</p>
-<h1 id="configuration.yaml">configuration.yaml</h1>
-<p>There are two sections that have to be added to configuration.yaml for this tracker:</p>
-<h2 id="template-sensors">Template Sensors</h2>
-<p>There are a couple of things going on here. First of all, there is the kitty_shot template which is outputting text based on the state of the input_boolean entities that we created in the last step. I will create automations later that will not allow any of the input_boolean entities to be on at the same time, but this is the main component of the sensor.</p>
-<pre><code># configuration.yaml
+![Kitty Shot Sensor](https://i.imgur.com/UV3Txtx.jpg)
+
+## Home Assistant Helpers
+
+I used HA’s helpers to set up three input_boolean entities. I created these in the UI by going to Configuration/Helpers and clicking the add button, then “Toggle.” I then added a name, in my case “Kitty Shot Husband”. I repeated this process twice more and named the input_boolean entities “Kitty Shot Wife” and “Kitty Shot Someone”. These entities will be used as input components in my final sensor. 
+
+# configuration.yaml
+
+There are two sections that have to be added to configuration.yaml for this tracker:
+
+## Template Sensors
+
+There are a couple of things going on here. First of all, there is the kitty_shot template which is outputting text based on the state of the input_boolean entities that we created in the last step. I will create automations later that will not allow any of the input_boolean entities to be on at the same time, but this is the main component of the sensor. 
+
+```
+# configuration.yaml
 
 ##########Kitty Shot Sensors##########
 sensor:
 - platform: template
   sensors:
     kitty_shot:
-        value_template: &gt;
+        value_template: >
             {% if is_state('input_boolean.kitty_shot_husband', 'on') %}
                 Husband gave kitty his shot.
             {% elif is_state('input_boolean.kitty_shot_wife', 'on') %}
@@ -29,14 +35,17 @@ sensor:
             {% else %}
                 Kitty needs his shot.
             {% endif %}
-</code></pre>
-<p>Next, this is a template sensor to be used as a component to check to see who gave the shot, and notify the other person that it has been given. I will get more into this later.</p>
-<pre><code># configuration.yaml
+```
+
+Next, this is a template sensor to be used as a component to check to see who gave the shot, and notify the other person that it has been given. I will get more into this later.
+
+```
+# configuration.yaml
 
 - platform: template
   sensors:
     kitty_shot_notify:
-        value_template: &gt;
+        value_template: >
             {% if is_state('input_boolean.kitty_shot_husband', 'on') %}
                 mobile_app_wife_iphone
             {% elif is_state('input_boolean.kitty_shot_wife', 'on') %}
@@ -44,11 +53,16 @@ sensor:
             {% else %}
                 Null
             {% endif %}
-</code></pre>
-<h2 id="actionable-notifications">Actionable Notifications</h2>
-<p>This part of the project requires that you have set up actionable notifications. I had some trouble doing this when I first did it for another project, but it’s fairly well documented here: <a href="https://companion.home-assistant.io/docs/notifications/actionable-notifications/">https://companion.home-assistant.io/docs/notifications/actionable-notifications/</a></p>
-<p><img src="https://i.imgur.com/1FwSguC.jpg" alt="Kitty Shot Actionable Notification"></p>
-<pre><code># configuration.yaml
+```
+
+## Actionable Notifications
+
+This part of the project requires that you have set up actionable notifications. I had some trouble doing this when I first did it for another project, but it’s fairly well documented here: https://companion.home-assistant.io/docs/notifications/actionable-notifications/
+
+![Kitty Shot Actionable Notification](https://i.imgur.com/1FwSguC.jpg)
+
+```
+# configuration.yaml
 
 ios:
   push:
@@ -69,12 +83,17 @@ ios:
             title: 'Wife shot kitty.'
           - identifier: 'HUSBAND_SHOT'
             title: 'Husband shot kitty.'
-</code></pre>
-<h1 id="automations">Automations</h1>
-<p>I created nine automations for this project, and I’ll do my best to explain them and the logic behind them:</p>
-<h2 id="shot-needed-notifications">Shot Needed Notifications</h2>
-<p>The first few automations send the actionable notification at prescribed times, which vary slightly between weekdays and weekends. (Don’t judge us wanting an extra hour of sleep on weekends!)</p>
-<pre><code># automations.yaml
+```
+# Automations
+
+I created nine automations for this project, and I’ll do my best to explain them and the logic behind them:
+
+## Shot Needed Notifications
+
+The first few automations send the actionable notification at prescribed times, which vary slightly between weekdays and weekends. (Don’t judge us wanting an extra hour of sleep on weekends!)
+
+```
+# automations.yaml
 
 - alias: Kitty Shot Tracker - Push Notification - Weekdays
   description: ''
@@ -140,10 +159,14 @@ ios:
       message: Have you given kitty his shot?
       title: Time for kitty's shot!
     service: notify.mobile_app_wife_iphone
-</code></pre>
-<h2 id="other-automation-components">Other Automation Components</h2>
-<p>This next set is pulling triple duty. The automation is run if the boolean switch is turned on manually (through the card UI) or if the actionable notification is fired. These automations also prohibit any of the three switches from being on at the same time.</p>
-<pre><code># automations.yaml
+```
+
+## Other Automation Components
+
+This next set is pulling triple duty. The automation is run if the boolean switch is turned on manually (through the card UI) or if the actionable notification is fired. These automations also prohibit any of the three switches from being on at the same time.
+
+```
+# automations.yaml
 
 - alias: Kitty Shot Tracker - iOS Response - Wife
   description: ''
@@ -188,9 +211,12 @@ ios:
   - data: {}
     entity_id: input_boolean.kitty_shot_someone
     service: input_boolean.turn_off
-</code></pre>
-<p>This automation sends the reminder notification again in one hour. This is useful if no one is home or available to give the shot at the moment, and we need to be reminded later. I decided not to do an arriving home trigger in case we were already home, but unable to get to it right that moment.</p>
-<pre><code># automations.yaml
+```
+
+This automation sends the reminder notification again in one hour. This is useful if no one is home or available to give the shot at the moment, and we need to be reminded later. I decided not to do an arriving home trigger in case we were already home, but unable to get to it right that moment.
+
+```
+# automations.yaml
 
 - alias: Kitty Shot Tracker - iOS Response - Remind me in an hour
   description: ''
@@ -205,9 +231,12 @@ ios:
   - data: {}
     entity_id: automation.kitty_shot_tracker_push_notification_weekdays
     service: automation.trigger
-</code></pre>
-<p>I set up this automation to use with an Amazon Echo Button that we had lying around. If one of us gives the cat his shot while we don’t have our phone handy, we can just push the echo button which is linked to the input_boolean.kitty_shot_someone entity through an Alexa routine. Because it could be either of us (or a cat sitter), we settled on the terminology “Someone.” Both of us will be alerted if this button is pushed.</p>
-<pre><code># automations.yaml
+```
+
+I set up this automation to use with an Amazon Echo Button that we had lying around. If one of us gives the cat his shot while we don’t have our phone handy, we can just push the echo button which is linked to the input_boolean.kitty_shot_someone entity through an Alexa routine. Because it could be either of us (or a cat sitter), we settled on the terminology “Someone.” Both of us will be alerted if this button is pushed. 
+
+```
+# automations.yaml
 
 - alias: Kitty Shot Tracker - Notify that shot has been given by "SOMEONE"
   description: ''
@@ -232,11 +261,16 @@ ios:
       message: '{{ states(''sensor.kitty_shot'') }}'
       title: Kitty has been shot!
     service: notify.mobile_app_wife_iphone
-</code></pre>
-<h2 id="shot-given-notifications">Shot Given Notifications</h2>
-<p>This automation uses the kitty_shot_notify sensor I set up at the beginning in configuration.yaml to check and see who gave the cat his shot, and notify the other person so we don’t double up.</p>
-<p><img src="https://i.imgur.com/Nw3YdX5.jpg" alt="Kitty Shot Given Notification"></p>
-<pre><code># automations.yaml
+```
+
+## Shot Given Notifications
+
+This automation uses the kitty_shot_notify sensor I set up at the beginning in configuration.yaml to check and see who gave the cat his shot, and notify the other person so we don’t double up.
+
+![Kitty Shot Given Notification](https://i.imgur.com/Nw3YdX5.jpg)
+
+```
+# automations.yaml
 
 - alias: Kitty Shot Tracker - Notify that shot has been given
   description: ''
@@ -250,9 +284,12 @@ ios:
       message: '{{ states(''sensor.kitty_shot'') }}'
       title: Kitty has been shot!
     service_template: notify.{{ states.sensor.kitty_shot_notify.state }}
-</code></pre>
-<p>This automation prevents getting duplicate notifications once the shot has been given.</p>
-<pre><code># automations.yaml
+```
+
+This automation prevents getting duplicate notifications once the shot has been given. 
+
+```
+# automations.yaml
 
 - alias: Kitty Shot Tracker - Automation Component
   description: Adds logic to not send notification if changing who gave shot.
@@ -279,10 +316,14 @@ ios:
   - data: {}
     entity_id: input_boolean.kitty_shot_someone
     service: input_boolean.turn_on
-</code></pre>
-<h2 id="reset-tracker">Reset Tracker</h2>
-<p>Finally, this automation resets the tracker twice a day, so when it’s time to give the shot again, everything is registered as off.</p>
-<pre><code># automations.yaml
+```
+
+## Reset Tracker
+
+Finally, this automation resets the tracker twice a day, so when it’s time to give the shot again, everything is registered as off.
+
+```
+# automations.yaml
 
 - alias: Kitty Shot Tracker - Reset Tracker
   description: ''
@@ -302,11 +343,16 @@ ios:
   - data: {}
     entity_id: input_boolean.kitty_shot_someone
     service: input_boolean.turn_off
-</code></pre>
-<h1 id="custom-card-for-lovelace-ui">Custom Card for Lovelace UI</h1>
-<p>I combined everything into a custom picture elements card. I had originally used an entity card with three button cards combined into stacks, but found I preferred the look of everything unified together, so I came up with this:</p>
-<p><img src="https://i.imgur.com/UV3Txtx.jpg" alt="Kitty Shot Sensor"></p>
-<pre><code>elements:
+```
+
+# Custom Card for Lovelace UI
+
+I combined everything into a custom picture elements card. I had originally used an entity card with three button cards combined into stacks, but found I preferred the look of everything unified together, so I came up with this:
+
+![Kitty Shot Sensor](https://i.imgur.com/UV3Txtx.jpg)
+
+```
+elements:
   - entity: sensor.kitty_shot
     style:
       bottom: 58%
@@ -397,5 +443,5 @@ ios:
     type: image
 image: ‘https://i.imgur.com/2KH5oqQ.png'
 type: picture-elements
-</code></pre>
+```
 

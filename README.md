@@ -448,4 +448,5 @@ elements:
 image: ‘https://i.imgur.com/2KH5oqQ.png'
 type: picture-elements
 ```
-
+# CAT TAX
+![Kitty Shot Sensor](https://i.imgur.com/lWSrFmd.jpg)
